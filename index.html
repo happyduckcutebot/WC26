@@ -1313,13 +1313,30 @@
     function selectWinner(round, index, team) {
       if (!team) return;
       state.winners[round][index] = team.name;
-      const order = ["r32", "r16", "qf", "sf", "final"];
-      const current = order.indexOf(round);
-      for (let i = current + 1; i < order.length; i++) {
-        state.winners[order[i]] = state.winners[order[i]].map(() => null);
-      }
+      validateDependentWinners();
       renderBracket();
       renderPrintSheet();
+    }
+
+    function validateDependentWinners() {
+      const order = ["r16", "qf", "sf", "final"];
+
+      order.forEach(round => {
+        const matches = getMatches(round);
+
+        state.winners[round] = state.winners[round].map((winnerName, index) => {
+          if (!winnerName) return null;
+
+          const match = matches[index];
+          if (!match) return null;
+
+          const validNames = match.teams
+            .filter(Boolean)
+            .map(team => team.name);
+
+          return validNames.includes(winnerName) ? winnerName : null;
+        });
+      });
     }
 
     function clearRoundWinners(round) {
