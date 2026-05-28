@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>World Cup 2026 Prediction Builder</title>
+<style>
+:root{
+  --bg:#f4f7fb; --card:#fff; --ink:#172033; --muted:#667085; --line:#dbe3ef;
+  --blue:#175cff; --blue2:#00a7d8; --green:#13a36f; --gold:#f2b705; --red:#ef4444;
+  --shadow:0 18px 45px rgba(23,32,51,.10);
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:radial-gradient(circle at 15% -10%,rgba(23,92,255,.16),transparent 28rem),radial-gradient(circle at 90% 0,rgba(0,167,216,.14),transparent 24rem),var(--bg);line-height:1.55}
+header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav{max-width:1280px;margin:0 auto;padding:.85rem 1.1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.brand{font-weight:950;letter-spacing:-.04em;color:var(--blue);font-size:1.15rem}
+.navlinks{display:flex;gap:.8rem;flex-wrap:wrap;font-size:.88rem;font-weight:800}
+.navlinks a{text-decoration:none;color:#344054}.navlinks a:hover{color:var(--blue)}
+main{max-width:1280px;margin:0 auto;padding:0 1.1rem 4rem}
+.hero{padding:4.5rem 0 2.4rem;display:grid;grid-template-columns:1.1fr .9fr;gap:2rem;align-items:center}
+.hero h1{font-size:clamp(2.8rem,7vw,6rem);line-height:.92;letter-spacing:-.075em;margin:0 0 1rem;color:#0f1d3a}
+.hero h1 span{background:linear-gradient(120deg,var(--blue),var(--blue2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:1.15rem;color:var(--muted);max-width:760px}
+.hero-card{background:linear-gradient(145deg,#0f1d3a,#123f99 60%,#008fb7);color:#fff;border-radius:32px;padding:2rem;box-shadow:0 30px 70px rgba(15,29,58,.25)}
+.hero-card h2{font-size:1.45rem;margin:0 0 1rem}
+.hero-card ul{margin:0;padding-left:1.2rem;color:#e5f6ff}
+.controls{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.3rem}
+button,.btn{border:0;border-radius:999px;padding:.78rem 1rem;font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:.45rem}
+.primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:white}.secondary{background:#fff;color:var(--blue);border:1px solid var(--line)}.danger{background:#fff0f0;color:#b42318;border:1px solid #ffd1d1}
+section{padding:2.3rem 0}
+.section-head{margin-bottom:1.2rem;max-width:900px}.section-head.center{text-align:center;margin-left:auto;margin-right:auto}
+.kicker{text-transform:uppercase;letter-spacing:.12em;font-size:.76rem;color:var(--blue);font-weight:950;margin-bottom:.45rem}
+h2{font-size:clamp(1.9rem,4vw,3.2rem);line-height:1.05;letter-spacing:-.055em;margin:.1rem 0 .6rem;color:#0f1d3a}
+.section-head p{color:var(--muted);font-size:1.05rem}
+.grid{display:grid;gap:1rem}.groups-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:rgba(255,255,255,.95);border:1px solid var(--line);border-radius:24px;padding:1.2rem;box-shadow:var(--shadow)}
+.group-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem}
+.group-title h3{margin:0;font-size:1.25rem;color:#0f1d3a}.chip{font-size:.76rem;padding:.3rem .55rem;border-radius:999px;background:#eef4ff;color:var(--blue);font-weight:900}
+.rank-list{display:grid;gap:.55rem}
+.team-row{display:grid;grid-template-columns:32px 1fr auto;gap:.6rem;align-items:center;background:#f8fafc;border:1px solid #e8eef7;border-radius:16px;padding:.55rem}
+.rank-num{width:32px;height:32px;border-radius:11px;display:grid;place-items:center;background:#fff;color:var(--blue);font-weight:950;border:1px solid var(--line)}
+.team-name{font-weight:850}.row-buttons{display:flex;gap:.35rem}.mini-btn{width:31px;height:31px;border-radius:10px;padding:0;background:#fff;color:#344054;border:1px solid var(--line);font-weight:950}
+.mini-btn:disabled{opacity:.35;cursor:not-allowed}
+.third-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.75rem}.third-option{display:flex;gap:.55rem;align-items:flex-start;padding:.85rem;background:#fff;border:1px solid var(--line);border-radius:18px;font-weight:800}.third-option input{margin-top:.25rem;accent-color:var(--blue)}
+.status{padding:.8rem 1rem;border-radius:18px;background:#fff7df;border:1px solid #f8d98b;color:#6b4e00;font-weight:850;margin-top:1rem}
+.status.ok{background:#eafaf3;border-color:#b7efd6;color:#075e40}.status.bad{background:#fff0f0;border-color:#ffd1d1;color:#9f1d1d}
+.knockout-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;align-items:start}
+.round{display:grid;gap:.8rem}.round h3{margin:.2rem 0;color:#0f1d3a}
+.match{background:#fff;border:1px solid var(--line);border-radius:20px;padding:.85rem;box-shadow:0 10px 24px rgba(23,32,51,.06)}
+.match-title{font-size:.76rem;color:var(--muted);font-weight:950;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.5rem}
+.match label{display:flex;gap:.5rem;align-items:center;padding:.55rem;border-radius:12px;margin:.3rem 0;background:#f8fafc;border:1px solid #edf2f8;font-weight:800}
+.match input{accent-color:var(--blue)}
+.third-slot{margin:.55rem 0 .65rem}.third-slot select{width:100%;padding:.62rem;border-radius:13px;border:1px solid var(--line);font-weight:800;color:var(--ink);background:white}
+.summary{background:#fff;border:1px solid var(--line);border-radius:28px;padding:1.4rem;box-shadow:var(--shadow)}
+.summary h3{margin:.4rem 0;color:#0f1d3a}.summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.print-page{display:none}
+footer{text-align:center;padding:2rem;color:var(--muted)}
+@media(max-width:1050px){.hero,.groups-grid,.knockout-grid,.summary-grid{grid-template-columns:1fr}.third-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.navlinks{display:none}.third-grid{grid-template-columns:1fr}.hero{padding-top:2.6rem}.hero-card{border-radius:24px}}
+@media print{
+  header,.hero,#groups,#thirds,#knockout .section-head,#knockout .controls,footer,.no-print{display:none!important}
+  body{background:#fff;color:#000;font-size:11px}
+  main{max-width:none;padding:0}
+  #printable{display:block!important}
+  section{padding:0}
+  .print-sheet{page-break-inside:avoid;padding:.1in}
+  .print-title{display:flex;justify-content:space-between;gap:1rem;border-bottom:3px solid #111;padding-bottom:.08in;margin-bottom:.08in}
+  .print-title h1{font-size:24px;margin:0;letter-spacing:-1px}
+  .print-title p{margin:0;font-size:10px;color:#333}
+  .print-grid{display:grid;grid-template-columns:1.1fr 1.2fr 1fr;gap:.1in}
+  .print-card{border:1px solid #222;border-radius:8px;padding:.07in;break-inside:avoid}
+  .print-card h2{font-size:14px;margin:0 0 .04in;color:#000}
+  .print-card h3{font-size:11px;margin:.04in 0;color:#000}
+  .print-card ol,.print-card ul{margin:.03in 0 .05in .18in;padding:0}
+  .print-card li{margin:0;font-size:9.2px}
+  .print-bracket{display:grid;grid-template-columns:repeat(4,1fr);gap:.05in}
+  .print-match{border:1px solid #666;border-radius:6px;padding:.04in;margin-bottom:.04in;font-size:8.6px}
+  .champion{font-size:22px;font-weight:950;text-align:center;border:3px solid #111;border-radius:12px;padding:.1in;margin-top:.05in}
+  @page{size:letter landscape;margin:.25in}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="brand">World Cup 2026 Prediction Builder</div>
+    <nav class="navlinks">
+      <a href="#groups">Group rankings</a><a href="#thirds">Third-place teams</a><a href="#knockout">Knockout</a><a href="#printable">Print page</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div>
+      <div class="kicker">For fun · no scores needed</div>
+      <h1>Build your <span>World Cup bracket</span></h1>
+      <p>Rank every group, choose the eight best third-place teams, then pick knockout winners. The app creates a one-page prediction sheet that you can print or save as PDF.</p>
+      <div class="controls">
+        <a class="btn primary" href="#groups">Start predictions</a>
+        <button class="secondary" onclick="fillFavorites()">Quick sample picks</button>
+        <button class="secondary" onclick="resetAll()">Reset</button>
+      </div>
+    </div>
+    <aside class="hero-card">
+      <h2>How it works</h2>
+      <ul>
+        <li>Drag-style ranking with up/down buttons for all 12 groups.</li>
+        <li>Top two teams advance automatically.</li>
+        <li>You choose exactly 8 of the 12 third-place teams.</li>
+        <li>For third-place bracket slots, the app suggests eligible teams and lets you adjust.</li>
+        <li>Pick winners through the final and print one clean page.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <section id="groups">
+    <div class="section-head center">
+      <div class="kicker">Step 1</div>
+      <h2>Select final group rankings</h2>
+      <p>Use the arrows to rank each group from 1st to 4th. The top two advance automatically; the 3rd-place team becomes eligible for the best-third selection.</p>
+    </div>
+    <div id="groupsContainer" class="grid groups-grid"></div>
+  </section>
+
+  <section id="thirds">
+    <div class="section-head center">
+      <div class="kicker">Step 2</div>
+      <h2>Select the eight best third-place teams</h2>
+      <p>Choose exactly 8. The selected teams will become available for the third-place slots in the Round of 32.</p>
+    </div>
+    <div id="thirdContainer" class="third-grid"></div>
+    <div id="thirdStatus" class="status">Choose 8 third-place teams.</div>
+  </section>
+
+  <section id="knockout">
+    <div class="section-head center">
+      <div class="kicker">Step 3</div>
+      <h2>Select knockout winners</h2>
+      <p>For matches involving third-place teams, choose one of your selected third-place qualifiers in the dropdown. Then pick winners round by round.</p>
+    </div>
+    <div class="controls no-print">
+      <button class="primary" onclick="buildKnockout()">Build / refresh knockout bracket</button>
+      <button class="secondary" onclick="generatePrintPage()">Update print page</button>
+      <button class="secondary" onclick="window.print()">Print / Save PDF</button>
+    </div>
+    <div id="knockoutContainer" class="knockout-grid"></div>
+  </section>
+
+  <section id="printable" class="print-page"></section>
+</main>
+<footer>Built for World Cup 2026 predictions. This is an unofficial fan tool.</footer>
+
+<script>
+const GROUPS = {
+  A:["Mexico","South Africa","Korea Republic","Czechia"],
+  B:["Canada","Bosnia and Herzegovina","Qatar","Switzerland"],
+  C:["Brazil","Morocco","Haiti","Scotland"],
+  D:["United States","Paraguay","Australia","Türkiye"],
+  E:["Germany","Curaçao","Côte d’Ivoire","Ecuador"],
+  F:["Netherlands","Japan","Sweden","Tunisia"],
+  G:["Belgium","Egypt","Iran","New Zealand"],
+  H:["Spain","Cape Verde","Saudi Arabia","Uruguay"],
+  I:["France","Senegal","Iraq","Norway"],
+  J:["Argentina","Algeria","Austria","Jordan"],
+  K:["Portugal","DR Congo","Uzbekistan","Colombia"],
+  L:["England","Croatia","Ghana","Panama"]
+};
+
+const THIRD_POOLS = {
+  74:["A","B","C","D","F"], 77:["C","D","F","G","H"], 79:["C","E","F","H","I"],
+  80:["E","H","I","J","K"], 81:["B","E","F","I","J"], 82:["A","E","H","I","J"],
+  85:["E","F","G","I","J"], 87:["D","E","I","J","L"]
+};
+
+const R32 = [
+  {id:73,a:"2A",b:"2B"},{id:74,a:"1E",third:true},{id:75,a:"1F",b:"2C"},{id:76,a:"1C",b:"2F"},
+  {id:77,a:"1I",third:true},{id:78,a:"2E",b:"2I"},{id:79,a:"1A",third:true},{id:80,a:"1L",third:true},
+  {id:81,a:"1D",third:true},{id:82,a:"1G",third:true},{id:83,a:"2K",b:"2L"},{id:84,a:"1H",b:"2J"},
+  {id:85,a:"1B",third:true},{id:86,a:"1J",b:"2H"},{id:87,a:"1K",third:true},{id:88,a:"2D",b:"2G"}
+];
+const R16 = [[89,73,75],[90,74,77],[91,76,78],[92,79,80],[93,83,84],[94,81,82],[95,86,88],[96,85,87]];
+const QF = [[97,89,90],[98,93,94],[99,91,92],[100,95,96]];
+const SF = [[101,97,98],[102,99,100]];
+const FINAL = [[104,101,102]];
+const THIRD_MATCH = [[103,101,102]];
+
+let rankings = JSON.parse(JSON.stringify(GROUPS));
+let selectedThirds = [];
+let matchWinners = {};
+let thirdAssignments = {};
+
+function teamFromCode(code){
+  const place = Number(code[0]); const group = code.slice(1);
+  return rankings[group][place-1] || code;
+}
+function codeLabel(code){
+  const place = code[0] === "1" ? "Winner" : code[0] === "2" ? "Runner-up" : "Third";
+  return `${place} Group ${code.slice(1)}`;
+}
+function renderGroups(){
+  const el=document.getElementById("groupsContainer"); el.innerHTML="";
+  Object.entries(rankings).forEach(([g,teams])=>{
+    const card=document.createElement("div"); card.className="card";
+    card.innerHTML=`<div class="group-title"><h3>Group ${g}</h3><span class="chip">Rank 1–4</span></div><div class="rank-list"></div>`;
+    const list=card.querySelector(".rank-list");
+    teams.forEach((team,i)=>{
+      const row=document.createElement("div"); row.className="team-row";
+      row.innerHTML=`<div class="rank-num">${i+1}</div><div class="team-name">${team}</div><div class="row-buttons"><button class="mini-btn" ${i===0?"disabled":""} onclick="moveTeam('${g}',${i},-1)">↑</button><button class="mini-btn" ${i===teams.length-1?"disabled":""} onclick="moveTeam('${g}',${i},1)">↓</button></div>`;
+      list.appendChild(row);
+    });
+    el.appendChild(card);
+  });
+  renderThirds();
+}
+function moveTeam(g,i,dir){
+  const arr=rankings[g]; const j=i+dir; [arr[i],arr[j]]=[arr[j],arr[i]];
+  selectedThirds = selectedThirds.filter(x => Object.values(getThirdMap()).includes(x));
+  renderGroups(); buildKnockout(false);
+}
+function getThirdMap(){
+  const out={}; Object.keys(rankings).forEach(g=>out[g]=rankings[g][2]); return out;
+}
+function renderThirds(){
+  const thirds=getThirdMap();
+  const el=document.getElementById("thirdContainer"); el.innerHTML="";
+  Object.entries(thirds).forEach(([g,team])=>{
+    const label=document.createElement("label"); label.className="third-option";
+    const checked=selectedThirds.includes(g)?"checked":"";
+    label.innerHTML=`<input type="checkbox" value="${g}" ${checked} onchange="toggleThird('${g}', this.checked)"><span><strong>Group ${g}</strong><br>${team}</span>`;
+    el.appendChild(label);
+  });
+  updateThirdStatus();
+}
+function toggleThird(g,on){
+  if(on && selectedThirds.length>=8){ alert("Please choose exactly 8 third-place teams. Uncheck one before adding another."); renderThirds(); return; }
+  if(on && !selectedThirds.includes(g)) selectedThirds.push(g);
+  if(!on) selectedThirds=selectedThirds.filter(x=>x!==g);
+  Object.keys(thirdAssignments).forEach(id=>{ if(!selectedThirds.includes(thirdAssignments[id])) delete thirdAssignments[id]; });
+  updateThirdStatus(); buildKnockout(false);
+}
+function updateThirdStatus(){
+  const s=document.getElementById("thirdStatus");
+  const n=selectedThirds.length;
+  s.textContent = n===8 ? "Great — exactly 8 third-place teams selected." : `Selected ${n}/8 third-place teams.`;
+  s.className = n===8 ? "status ok" : n>8 ? "status bad" : "status";
+}
+function thirdTeamName(g){ return rankings[g]?.[2] || `3rd Group ${g}`; }
+function assignThirdForMatch(id){
+  if(thirdAssignments[id] && selectedThirds.includes(thirdAssignments[id])) return thirdAssignments[id];
+  const pool = THIRD_POOLS[id] || [];
+  const used = new Set(Object.values(thirdAssignments));
+  const candidate = selectedThirds.find(g=>pool.includes(g) && !used.has(g)) || selectedThirds.find(g=>!used.has(g)) || selectedThirds[0] || "";
+  thirdAssignments[id]=candidate;
+  return candidate;
+}
+function sideName(side, matchId){
+  if(side) return teamFromCode(side);
+  const g=assignThirdForMatch(matchId);
+  return g ? thirdTeamName(g) : "Select 3rd-place team";
+}
+function renderMatch(roundEl, id, a, b, title, isThird=false){
+  const div=document.createElement("div"); div.className="match"; div.dataset.match=id;
+  let thirdSelect="";
+  let nameA=a, nameB=b;
+  if(isThird){
+    const assigned=assignThirdForMatch(id);
+    const pool=THIRD_POOLS[id] || [];
+    const opts=selectedThirds.map(g=>`<option value="${g}" ${g===assigned?"selected":""}>${thirdTeamName(g)} — 3rd Group ${g}${pool.includes(g)?"":" (outside listed pool)"}</option>`).join("");
+    thirdSelect=`<div class="third-slot"><select onchange="thirdAssignments[${id}]=this.value; buildKnockout(false)"><option value="">Select 3rd-place team</option>${opts}</select><small>Eligible pool: ${pool.map(x=>"Group "+x).join(", ")}</small></div>`;
+    nameB=assigned?thirdTeamName(assigned):"Select 3rd-place team";
+  }
+  const chosen=matchWinners[id]||"";
+  div.innerHTML=`<div class="match-title">${title} · Match ${id}</div>${thirdSelect}
+    <label><input type="radio" name="m${id}" value="${nameA}" ${chosen===nameA?"checked":""} onchange="setWinner(${id}, this.value)"> <span>${nameA}</span></label>
+    <label><input type="radio" name="m${id}" value="${nameB}" ${chosen===nameB?"checked":""} onchange="setWinner(${id}, this.value)"> <span>${nameB}</span></label>`;
+  roundEl.appendChild(div);
+}
+function setWinner(id,val){
+  matchWinners[id]=val;
+  // clear downstream choices that may have depended on this
+  [89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104].forEach(mid=>{ if(mid>id) delete matchWinners[mid]; });
+  buildKnockout(false);
+}
+function winnerName(id){ return matchWinners[id] || `Winner M${id}`; }
+function loserName(id){
+  const match = document.querySelector(`.match[data-match="${id}"]`);
+  if(!match) return `Runner-up M${id}`;
+  const labels=[...match.querySelectorAll("label span")].map(x=>x.textContent);
+  return labels.find(x=>x!==matchWinners[id]) || `Runner-up M${id}`;
+}
+function buildKnockout(scroll=true){
+  const container=document.getElementById("knockoutContainer"); container.innerHTML="";
+  const rounds=[
+    ["Round of 32", R32],
+    ["Round of 16", R16],
+    ["Quarterfinals", QF],
+    ["Semifinals", SF],
+    ["Final", FINAL]
+  ];
+  rounds.forEach(([name, matches])=>{
+    const round=document.createElement("div"); round.className="round"; round.innerHTML=`<h3>${name}</h3>`;
+    if(name==="Round of 32"){
+      matches.forEach(m=>renderMatch(round,m.id,teamFromCode(m.a),m.b?teamFromCode(m.b):null,"Round of 32",m.third));
+    } else if(name==="Round of 16"){
+      matches.forEach(([id,m1,m2])=>renderMatch(round,id,winnerName(m1),winnerName(m2),"Round of 16"));
+    } else if(name==="Quarterfinals"){
+      matches.forEach(([id,m1,m2])=>renderMatch(round,id,winnerName(m1),winnerName(m2),"Quarterfinal"));
+    } else if(name==="Semifinals"){
+      matches.forEach(([id,m1,m2])=>renderMatch(round,id,winnerName(m1),winnerName(m2),"Semifinal"));
+    } else {
+      matches.forEach(([id,m1,m2])=>renderMatch(round,id,winnerName(m1),winnerName(m2),"Final"));
+      const champ=document.createElement("div"); champ.className="summary";
+      champ.innerHTML=`<h3>Champion</h3><p style="font-size:1.8rem;font-weight:950;margin:.2rem 0;color:var(--blue)">${matchWinners[104]||"Pick the final winner"}</p>`;
+      round.appendChild(champ);
+    }
+    container.appendChild(round);
+  });
+  generatePrintPage();
+  if(scroll) location.hash="knockout";
+}
+function groupSummaryHTML(){
+  return Object.entries(rankings).map(([g,teams])=>`<div class="print-card"><h2>Group ${g}</h2><ol>${teams.map(t=>`<li>${t}</li>`).join("")}</ol></div>`).join("");
+}
+function r32Summary(){
+  return R32.map(m=>{
+    const a=teamFromCode(m.a); let b=m.b?teamFromCode(m.b):thirdTeamName(thirdAssignments[m.id]);
+    return {id:m.id, teams:[a,b], winner:matchWinners[m.id]||""};
+  });
+}
+function roundSummary(arr){return arr.map(([id,a,b])=>({id,teams:[winnerName(a),winnerName(b)],winner:matchWinners[id]||""}));}
+function matchPrintHTML(matches,title){
+  return `<div class="print-card"><h2>${title}</h2>${matches.map(m=>`<div class="print-match"><strong>M${m.id}</strong>: ${m.teams[0]} vs ${m.teams[1]}<br><strong>Winner:</strong> ${m.winner || "—"}</div>`).join("")}</div>`;
+}
+function generatePrintPage(){
+  const thirds=selectedThirds.map(g=>`<li>${thirdTeamName(g)} — Group ${g}</li>`).join("");
+  const champ=matchWinners[104]||"—";
+  const printable=document.getElementById("printable");
+  printable.innerHTML=`<div class="print-sheet">
+    <div class="print-title"><div><h1>World Cup 2026 Prediction Page</h1><p>Group rankings, best third-place teams, and knockout winners</p></div><div><p><strong>Champion</strong></p><p>${champ}</p></div></div>
+    <div class="print-grid">
+      <div><div class="print-card"><h2>Group Stage</h2></div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:.05in">${groupSummaryHTML()}</div></div>
+      <div class="print-bracket">${matchPrintHTML(r32Summary(),"Round of 32")}${matchPrintHTML(roundSummary(R16),"Round of 16")}${matchPrintHTML(roundSummary(QF),"Quarterfinals")}${matchPrintHTML(roundSummary(SF),"Semifinals")}${matchPrintHTML(roundSummary(FINAL),"Final")}</div>
+      <div><div class="print-card"><h2>Best Third-Place Teams</h2><ol>${thirds}</ol></div><div class="champion">Champion<br>${champ}</div></div>
+    </div>
+  </div>`;
+}
+function fillFavorites(){
+  rankings = {
+    A:["Mexico","Czechia","Korea Republic","South Africa"],
+    B:["Switzerland","Canada","Bosnia and Herzegovina","Qatar"],
+    C:["Brazil","Morocco","Scotland","Haiti"],
+    D:["United States","Türkiye","Paraguay","Australia"],
+    E:["Germany","Ecuador","Côte d’Ivoire","Curaçao"],
+    F:["Netherlands","Japan","Sweden","Tunisia"],
+    G:["Belgium","Egypt","Iran","New Zealand"],
+    H:["Spain","Uruguay","Saudi Arabia","Cape Verde"],
+    I:["France","Norway","Senegal","Iraq"],
+    J:["Argentina","Austria","Algeria","Jordan"],
+    K:["Portugal","Colombia","Uzbekistan","DR Congo"],
+    L:["England","Croatia","Ghana","Panama"]
+  };
+  selectedThirds=["A","C","D","E","F","H","I","J"];
+  matchWinners={}; thirdAssignments={};
+  renderGroups(); buildKnockout(false);
+}
+function resetAll(){
+  rankings=JSON.parse(JSON.stringify(GROUPS)); selectedThirds=[]; matchWinners={}; thirdAssignments={};
+  renderGroups(); buildKnockout(false); location.hash="groups";
+}
+renderGroups();
+buildKnockout(false);
+</script>
+</body>
+</html>
